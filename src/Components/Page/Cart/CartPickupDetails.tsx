@@ -11,12 +11,14 @@ function CartPickupDetails() {
   );
   const [isLoading, setLoading] = useState(false);
 
+  const userData = useSelector((state:RootState) => state.userAuthStore);
+
   let grandTotal: number = 0;
   let totalItems = 0;
 
   const initialUserData = {
-    name: "",
-    email: "",
+    name: userData.fullName,
+    email: userData.email,
     phoneNumber: "",
   };
 

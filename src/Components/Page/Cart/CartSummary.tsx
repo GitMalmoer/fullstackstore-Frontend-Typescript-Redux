@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { cartItemModel } from "../../../Interfaces";
+import { cartItemModel, userModel } from "../../../Interfaces";
 import { RootState } from "../../../Storage/Redux/store";
 import { removeFromCart, updateQuantity } from "../../../Storage/Redux/shoppingCartSlice";
 import { useUpdateShoppingCartMutation } from "../../../Apis/shoppingCartApi";
@@ -12,24 +12,28 @@ function CartSummary() {
   const dispatch = useDispatch();
   const [updateShoppingCart] = useUpdateShoppingCartMutation();
 
+  const userData: userModel = useSelector(
+    (state: RootState) => state.userAuthStore
+  );
+
   const handleQuantity = async (updateQuantityBy : number,cartItem : cartItemModel) => {
     if(updateQuantityBy == -1 && cartItem.quantity == 1 || updateQuantityBy == 0)
     {
         console.log("remove")
         //remove
         await updateShoppingCart({
-          userId:"a1b745e5-6cdd-4cbf-9527-40a435b86360",
-          menuItemId:cartItem.menuItem?.id,
-          updateQuantityBy:updateQuantityBy,
+          userId: userData.id,
+          menuItemId: cartItem.menuItem?.id,
+          updateQuantityBy: updateQuantityBy,
         });
         dispatch(removeFromCart({cartItem}));
     }
     else{
         // update the quantity with new value
         await updateShoppingCart({
-          userId:"a1b745e5-6cdd-4cbf-9527-40a435b86360",
-          menuItemId:cartItem.menuItem?.id,
-          updateQuantityBy:updateQuantityBy,
+          userId: userData.id,
+          menuItemId: cartItem.menuItem?.id,
+          updateQuantityBy: updateQuantityBy,
         });
         dispatch(updateQuantity({cartItem,quantity:cartItem.quantity! + updateQuantityBy }));
     }

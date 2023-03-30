@@ -1,14 +1,28 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
-import { cartItemModel } from "../../Interfaces";
+import { Root } from "react-dom/client";
+import { useSelector, useDispatch } from "react-redux";
+import { NavLink, Navigate, useNavigate } from "react-router-dom";
+import { cartItemModel, userModel } from "../../Interfaces";
 import { RootState } from "../../Storage/Redux/store";
+import { setLoggedInUser, emptyUserState } from "../../Storage/Redux/userAuthSlice";
 let logo = require("../../Assets/Images/mango.png");
 
 function Header() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const shoppingCartFromStore: cartItemModel[] = useSelector(
     (state: RootState) => state.shoppingCartStore.cartItems ?? []
   );
+
+  const userData: userModel = useSelector(
+    (state: RootState) => state.userAuthStore
+  );
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    dispatch(setLoggedInUser({...emptyUserState}));
+  }
 
   return (
     <div>
@@ -48,9 +62,8 @@ function Header() {
                 >
                   {" "}
                   <i className="bi bi-cart"></i>{" "}
-                  {shoppingCartFromStore?.length
-                    ? `(${shoppingCartFromStore.length})`
-                    : ""}
+
+                  {userData.id && (`${shoppingCartFromStore.length}`)}
                 </NavLink>
               </li>
 
@@ -86,30 +99,60 @@ function Header() {
                 </ul>
               </li>
               {/* end of dropdown */}
+              <NavLink className="nav-link" aria-current="page" to="/authentication">
+                  Authentication
+                </NavLink>
+                <NavLink className="nav-link" aria-current="page" to="/authorization">
+                  Authorization
+                </NavLink>
+
               <div className="d-flex" style={{ marginLeft: "auto" }}>
-                <li className="nav-item">
-                  <button
-                    className="btn btn-success btn-outlined rounded-pill text-white mx-2"
-                    style={{
-                      border: "none",
-                      height: "40px",
-                      width: "100px",
-                    }}
-                  >
-                    Logout
-                  </button>
-                </li>
-                <li className="nav-item text-white">
-                    <NavLink className="nav-link" to="/register">Register</NavLink>
-                </li>
-                <li className="nav-item text-white">
-                    <NavLink className="btn btn-success btn-outlined rounded-pill text-white mx-2"
-                    style={{
-                      border: "none",
-                      height: "40px",
-                      width: "100px",
-                    }} to="/login">Login</NavLink>
-                </li>
+                {userData.id && (
+                  <>
+                  <li className="nav-item">
+                    <button className="nav-link active" style={{backgroundColor:"transparent", border:"none", cursor:"pointer",}}>
+                      Welcome, {userData.fullName}
+                    </button>
+                  </li>
+                  <li className="nav-item">
+                    <button
+                      onClick={handleLogout}
+                      className="btn btn-success btn-outlined rounded-pill text-white mx-2"
+                      style={{
+                        border: "none",
+                        height: "40px",
+                        width: "100px",
+                      }}
+                    >
+                      Logout
+                    </button>
+                  </li>
+                  </>
+                )}
+                {/* hide login btn and register */}
+                {!userData.id && (
+                  <>
+                    {" "}
+                    <li className="nav-item text-white">
+                      <NavLink className="nav-link" to="/register">
+                        Register
+                      </NavLink>
+                    </li>
+                    <li className="nav-item text-white">
+                      <NavLink
+                        className="btn btn-success btn-outlined rounded-pill text-white mx-2"
+                        style={{
+                          border: "none",
+                          height: "40px",
+                          width: "100px",
+                        }}
+                        to="/login"
+                      >
+                        Login
+                      </NavLink>
+                    </li>
+                  </>
+                )}
               </div>
             </ul>
           </div>

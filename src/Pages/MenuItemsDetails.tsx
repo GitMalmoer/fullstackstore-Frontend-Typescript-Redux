@@ -1,13 +1,14 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useGetMenuItemByIdQuery } from "../Apis/menuItemApi";
-import { menuItemModel } from "../Interfaces";
+import { apiResponse, menuItemModel, userModel } from "../Interfaces";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUpdateShoppingCartMutation } from "../Apis/shoppingCartApi";
 import { MainLoader, MiniLoader } from "../Components/Page/Common";
 import { useSelector } from "react-redux";
 import { RootState } from "../Storage/Redux/store";
+import { toastNotify } from "../Helper";
 
 // USER ID a1b745e5-6cdd-4cbf-9527-40a435b86360
 
@@ -19,30 +20,40 @@ function MenuItemsDetails() {
   const [isAddingToCart, setIsAddingToCart] = useState<boolean>(false);
   //const updateShoppingCart = useUpdateShoppingCartMutation()[0];
   const [updateShoppingCart] = useUpdateShoppingCartMutation(); // this hook returns array [destructurizing array in brackets]
-// JUST A CHECKER IF THERE IS VALUE IN STORE 
+  // JUST A CHECKER IF THERE IS VALUE IN STORE
   //const menuItems = useSelector((state:RootState) => state.menuItemStore.menuItem); // test
 
+  const userData: userModel = useSelector(
+    (state: RootState) => state.userAuthStore
+  );
+
   const handleAddToCart = async (menuItemId: number) => {
+    if (!userData.id) {
+      navigate("/login");
+      return null;
+    }
     setIsAddingToCart(true);
-    const response = await updateShoppingCart({
+    const response: apiResponse = await updateShoppingCart({
       menuItemId,
       updateQuantityBy: quantity,
-      userId: "a1b745e5-6cdd-4cbf-9527-40a435b86360"
+      userId: userData.id,
     });
-    console.log("Response down below");
-    console.log(response);
+
+    if (response.data && response.data.isSuccess) {
+      toastNotify("Item added to cart sucessfully");
+    }
 
     setIsAddingToCart(false);
   };
 
   if (isLoading) {
-    return <MainLoader/>;
+    return <MainLoader />;
   }
   const menuItem: menuItemModel = data.result;
 
   const handleQuantity = (num: number) => {
     let newQuantity = quantity + num;
-    
+
     if (newQuantity < 1) {
       setQuantity(1);
     } else {
@@ -94,10 +105,18 @@ function MenuItemsDetails() {
           </span>
           <div className="row pt-4">
             <div className="col-5">
-              {isAddingToCart ? (<button disabled className="btn btn-success form-control"><MiniLoader/></button>):(<button className="btn btn-success form-control" onClick={() => handleAddToCart(menuItem?.id)}>
-                Add to Cart
-              </button>)}
-              
+              {isAddingToCart ? (
+                <button disabled className="btn btn-success form-control">
+                  <MiniLoader />
+                </button>
+              ) : (
+                <button
+                  className="btn btn-success form-control"
+                  onClick={() => handleAddToCart(menuItem?.id)}
+                >
+                  Add to Cart
+                </button>
+              )}
             </div>
 
             <div className="col-5 ">

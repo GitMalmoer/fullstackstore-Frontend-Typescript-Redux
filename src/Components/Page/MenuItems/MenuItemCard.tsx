@@ -1,28 +1,43 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { menuItemModel } from "../../../Interfaces";
+import { apiResponse, menuItemModel, userModel } from "../../../Interfaces";
 import { useUpdateShoppingCartMutation } from "../../../Apis/shoppingCartApi";
-import {useState} from "react";
+import { useState } from "react";
 import { MiniLoader } from "../Common";
+import { toastNotify } from "../../../Helper";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../Storage/Redux/store";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   menuItem: menuItemModel;
 }
 
 function MenuItemCard(props: Props) {
+  const navigate = useNavigate();
   const [updateShoppingCart] = useUpdateShoppingCartMutation();
-  const [isAddingToCart,setIsAddingToCart] = useState<boolean>(false);
+  const [isAddingToCart, setIsAddingToCart] = useState<boolean>(false);
+  const userData: userModel = useSelector(
+    (state: RootState) => state.userAuthStore
+  );
 
-  const handleAddToCart = async (menuItemId :number) => {
+  const handleAddToCart = async (menuItemId: number) => {
+    if (!userData.id) {
+      navigate("/login");
+      return null;
+    }
     setIsAddingToCart(true);
-    const response = await updateShoppingCart({
+
+    const response: apiResponse = await updateShoppingCart({
       menuItemId,
       updateQuantityBy: 1,
-      userId: "a1b745e5-6cdd-4cbf-9527-40a435b86360"
-    })
-    //console.log(response)
+      userId: userData.id,
+    });
+    if (response.data && response.data?.isSuccess) {
+      toastNotify("Item added to cart!");
+    }
     setIsAddingToCart(false);
-  }
+  };
 
   return (
     <div className="col-md-4 col-12 p-4">
@@ -61,8 +76,8 @@ function MenuItemCard(props: Props) {
             )}
 
           {isAddingToCart ? (
-            <div style={{position:"absolute",top:"15px",right:"15px"}}>
-              <MiniLoader type="warning" scale={100}/>
+            <div style={{ position: "absolute", top: "15px", right: "15px" }}>
+              <MiniLoader type="warning" scale={100} />
             </div>
           ) : (
             <i
