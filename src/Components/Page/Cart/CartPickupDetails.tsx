@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useInitiatePaymentMutation } from "../../../Apis/paymentApi";
 import { inputHelper } from "../../../Helper";
-import { cartItemModel } from "../../../Interfaces";
+import { apiResponse, cartItemModel } from "../../../Interfaces";
 import { RootState } from "../../../Storage/Redux/store";
 import { MiniLoader } from "../Common";
 
@@ -9,26 +11,37 @@ function CartPickupDetails() {
   const shoppingCartFromStore: cartItemModel[] = useSelector(
     (state: RootState) => state.shoppingCartStore.cartItems ?? []
   );
-  const [isLoading, setLoading] = useState(false);
-
   const userData = useSelector((state:RootState) => state.userAuthStore);
+  
+  const [isLoading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const [initiatePayment] = useInitiatePaymentMutation();
 
-  let grandTotal: number = 0;
-  let totalItems = 0;
-
-  const initialUserData = {
+  let initialUserData = {
     name: userData.fullName,
     email: userData.email,
     phoneNumber: "",
   };
+
+  const [userInput, setUserInput] = useState(initialUserData);
+
+useEffect(()=> {
+  setUserInput(initialUserData = {
+    name: userData.fullName,
+    email: userData.email,
+    phoneNumber: "",
+  });
+},[userData])
+
+
+let grandTotal: number = 0;
+let totalItems = 0;
 
   shoppingCartFromStore.map((cartItem: cartItemModel) => {
     grandTotal += (cartItem.menuItem?.price ?? 0) * (cartItem.quantity ?? 0);
     totalItems += cartItem.quantity ?? 0;
     return null;
   });
-
-  const [userInput, setUserInput] = useState(initialUserData);
 
   const handleUserInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const tempData = inputHelper(e, userInput);
@@ -38,6 +51,16 @@ function CartPickupDetails() {
   const handleSumbit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+
+    const {data}:apiResponse = await initiatePayment(userData.id);
+    //const orderSummary = {grandTotal,totalItems};
+    navigate("/payment",{
+      state: {
+        apiResult: data?.result,
+        userInput,
+      }
+    })
+    setLoading(false);
   };
 
   return (
