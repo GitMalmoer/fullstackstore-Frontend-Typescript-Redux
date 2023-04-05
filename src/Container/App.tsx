@@ -18,13 +18,22 @@ function App() {
   const userData: userModel = useSelector(
     (state: RootState) => state.userAuthStore
   );
-
+const [skip, setSkip] = useState(true);
 const dispatch = useDispatch();
 
-const {data,isLoading} = useGetShoppingCartQuery(userData.id);
+useEffect(()=> {
+  if(userData)
+  {
+    setSkip(false);
+  }
+  },[userData]);
+// SKIP IS USED TO SKIP THE NULL CALL TO THE DATABASE, AT INITALIZATION USERDATA.ID IS NULL!
+const {data,isLoading} = useGetShoppingCartQuery(userData.id,{skip:skip});
+
+
 
 useEffect(() => {
-  if(!isLoading)
+  if(!isLoading && data)
   {
     //console.log(data.result?.cartItems);
     dispatch(setShoppingCart(data.result?.cartItems));
