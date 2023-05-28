@@ -42,7 +42,7 @@ function MenuItemCard(props: Props) {
   return (
     <div className="col-md-4 col-12 p-4">
       <div
-        className="card"
+        className="card h-100"
         style={{ boxShadow: "0 1px 7px 0 rgb(0 0 0 / 50%)" }}
       >
         <div className="card-body pt-2">

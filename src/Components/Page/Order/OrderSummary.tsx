@@ -30,12 +30,10 @@ function OrderSummary({ data, userInput }: OrderSummaryProps) {
 
   const nextStatus: any =
     data.status! === SD_Status.CONFIRMED
-      ? { color: "info", value: SD_Status.BEIGN_COOKED }
-      : data.status! === SD_Status.BEIGN_COOKED
-      ? { color: "warning", value: SD_Status.READY_FOR_PICKUP }
-      : data.status! === SD_Status.READY_FOR_PICKUP
-      ? { color: "success", value: SD_Status.COMPLETED }
-      : data.status! === SD_Status.COMPLETED && {
+      ? { color: "info", value: SD_Status.PREPARING_FOR_SENDING }
+      : data.status! === SD_Status.PREPARING_FOR_SENDING
+      ? { color: "success", value: SD_Status.SENT }
+      : data.status! === SD_Status.SENT && {
           color: "info",
           value: SD_Status.CONFIRMED,
         };

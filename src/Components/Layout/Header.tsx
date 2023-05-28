@@ -9,7 +9,7 @@ import {
   emptyUserState,
 } from "../../Storage/Redux/userAuthSlice";
 import { SD_Roles } from "../../Utility/SD";
-let logo = require("../../Assets/Images/mango.png");
+let logo = require("../../Assets/Images/logotransp.png");
 
 function Header() {
   const navigate = useNavigate();

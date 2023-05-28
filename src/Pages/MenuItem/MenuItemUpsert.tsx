@@ -12,10 +12,10 @@ import { MainLoader } from "../../Components/Page/Common";
 import { SD_Categories } from "../../Utility/SD";
 
 const categories = [
-  SD_Categories.APPETIZER,
-  SD_Categories.ENTREE,
-  SD_Categories.BEVERAGES,
-  SD_Categories.DESSERT,
+  SD_Categories.Polishers,
+  SD_Categories.Equipment,
+  SD_Categories.Files,
+  SD_Categories.Cosmetics,
 ];
 
 const menuItemData = {
@@ -48,6 +48,13 @@ function MenuItemUpsert() {
         price: data?.result.price,
         specialTag: data?.result.specialTag,
       };
+      let newPrice : string = tempData?.price.toString();
+
+      if(newPrice.includes('.'))
+      {
+        tempData.price = newPrice.replace('.',',')
+      }
+
       setMenuItemInputs(tempData);
       setImageToDispaly(data?.result.image);
     }
@@ -102,7 +109,7 @@ function MenuItemUpsert() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-
+    console.log(menuItemInputs);
     if (!imageToStore && !id) {
       toastNotify("Please upload an image", "error");
       setLoading(false);
@@ -131,15 +138,30 @@ function MenuItemUpsert() {
         toastNotify("Update successfull!");
         navigate("/menuitem/menuitemlist");
       } else {
-        let message = response?.data?.errorMessages?.[0];
-
+        let message = response?.error?.data?.errors
+        console.log(response);
         toastNotify("Something went wrong while updating!", "error");
-        toastNotify(message ? message : "no content", "info");
+        if(message)
+        {
+          // this is a bit complicated because response returns array of arrays so we have to put all separate arrays into one
+          let arrayObjectValues : string[] = Object.values(message);
+          let arrayOfErrors : string[] = [];
+
+          arrayObjectValues.forEach((errors : any) => {
+            let oneError : string = errors[0];
+            arrayOfErrors.push(oneError);
+          } )
+        
+          arrayOfErrors.forEach((error) => {
+            toastNotify(error , "error");
+          })
+        }
       }
     } else {
       const response: apiResponse = await createMenuItem(formData);
       if (response) {
         navigate("/menuitem/menuitemlist");
+        console.log(response);
       }
     }
     setLoading(false);
@@ -193,7 +215,7 @@ function MenuItemUpsert() {
 
             </select>
             <input
-              type="number"
+              type="text"
               className="form-control mt-3"
               required
               placeholder="Enter Price"

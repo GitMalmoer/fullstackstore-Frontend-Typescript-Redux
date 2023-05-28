@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://fullstackstoreapi20230323222822.azurewebsites.net/api/",
+    baseUrl: "https://localhost:7187/api/",
   }),
   endpoints: (builder) => ({
     registerUser: builder.mutation({
@@ -26,4 +26,5 @@ const authApi = createApi({
 });
 
 export const {useRegisterUserMutation,useLoginUserMutation} = authApi;
+// export const authApiReducer = authApi.reducer; just a test do not use
 export default authApi;

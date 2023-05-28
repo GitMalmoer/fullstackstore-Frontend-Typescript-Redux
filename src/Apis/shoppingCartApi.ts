@@ -3,7 +3,11 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const shoppingCartApi = createApi({
   reducerPath: "shoppingCartApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://fullstackstoreapi20230323222822.azurewebsites.net/api/",
+    baseUrl: "https://localhost:7187/api/",
+    prepareHeaders: (headers : Headers, api) => {
+      const token = localStorage.getItem("token");
+      token && (headers.append("Authorization","Bearer "+token));
+    },
   }),
   tagTypes: ["ShoppingCarts"],
   endpoints: (builder) => ({

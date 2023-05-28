@@ -6,17 +6,16 @@ export enum SD_Roles {
 export enum SD_Status{
     PENDING = "Pending",
     CONFIRMED = "Confirmed",
-    BEIGN_COOKED = "Being cooked",
-    READY_FOR_PICKUP = "Ready for pickup",
-    COMPLETED = "Completed",
+    PREPARING_FOR_SENDING = "Preparing for sending",
+    SENT = "Sent",
     CANCELLED = "Cancelled",
 }
 
 export enum SD_Categories{
-    APPETIZER = "Appetizer",
-    ENTREE = "Entree",
-    DESSERT = "DESSERT",
-    BEVERAGES = "Beverages",
+    Polishers = "Polishers",
+    Equipment = "Equipment",
+    Files = "Files",
+    Cosmetics = "Cosmetics",
 }
 
 export enum SD_SortTypes{

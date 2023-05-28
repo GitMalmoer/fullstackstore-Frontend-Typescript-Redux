@@ -2,7 +2,7 @@
 import { toast,TypeOptions } from "react-toastify";
 
 const toastNotify = (message : string, type:TypeOptions= 'success') => {
-    toast(`🦄 ${message}`, {
+    toast(` ${message}`, {
         type:type,
         position: "top-center",
         autoClose: 5000,

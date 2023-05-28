@@ -4,7 +4,11 @@ import orderDetailModel from "../Interfaces/orderDetailModel";
 const orderApi = createApi({
   reducerPath: "orderApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://fullstackstoreapi20230323222822.azurewebsites.net/api/",
+    baseUrl: "https://localhost:7187/api/",
+    prepareHeaders: (headers : Headers, api) => {
+      const token = localStorage.getItem("token");
+      token && (headers.append("Authorization","Bearer "+token));
+    },
   }),
   tagTypes:["Orders"],
   endpoints: (builder) => ({

@@ -31,7 +31,7 @@ function Banner() {
               width: "100%",
               padding: "20px 20px",
             }}
-            placeholder="Search for Food Items!"
+            placeholder="Search for Nail Items!"
           />
           <span style={{ position: "relative", left: "-43px" }}>
             <i className="bi bi-search"></i>

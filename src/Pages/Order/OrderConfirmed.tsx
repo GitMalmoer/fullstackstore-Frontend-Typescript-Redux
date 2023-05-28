@@ -14,7 +14,7 @@ function OrderConfirmed() {
         <div className="pb-5">
           <h2 className=" text-success">Order has been Confirmed!</h2>
           <h5 className="mt-3">Your order ID: {id}</h5>
-          <p>We will soon start to cook the delicous food you ordered. </p>
+          <p>We will soon send the items you ordered. </p>
           <img
             src={confirmedImage}
             alt='img'
