@@ -124,7 +124,7 @@ function Header() {
                   {userData.id && `${shoppingCartFromStore.length}`}
                 </NavLink>
               </li>
-
+{/* 
               <NavLink
                 className="nav-link"
                 aria-current="page"
@@ -138,7 +138,7 @@ function Header() {
                 to="/authorization"
               >
                 Authorization
-              </NavLink>
+              </NavLink> */}
 
               <div className="d-flex" style={{ marginLeft: "auto" }}>
                 {userData.id && (

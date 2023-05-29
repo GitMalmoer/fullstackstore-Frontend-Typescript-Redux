@@ -4,7 +4,7 @@ import orderDetailModel from "../Interfaces/orderDetailModel";
 const orderApi = createApi({
   reducerPath: "orderApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://localhost:7187/api/",
+    baseUrl: "https://nailsbookingapi.azurewebsites.net/api/",
     prepareHeaders: (headers : Headers, api) => {
       const token = localStorage.getItem("token");
       token && (headers.append("Authorization","Bearer "+token));
