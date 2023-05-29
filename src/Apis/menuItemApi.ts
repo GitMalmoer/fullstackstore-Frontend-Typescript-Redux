@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const menuItemApi = createApi({
   reducerPath: "menuItemApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://nailsbookingapi.azurewebsites.net/api/",
+    baseUrl: "https://fullstackstoreapi.azurewebsites.net/api/",
     //baseUrl: "https://localhost:7187/api/",
     prepareHeaders: (headers : Headers, api) => {
       const token = localStorage.getItem("token");

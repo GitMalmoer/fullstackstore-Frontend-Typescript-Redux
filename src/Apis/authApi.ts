@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://nailsbookingapi.azurewebsites.net/api/",
+    baseUrl: "https://fullstackstoreapi.azurewebsites.net/api/",
   }),
   endpoints: (builder) => ({
     registerUser: builder.mutation({
