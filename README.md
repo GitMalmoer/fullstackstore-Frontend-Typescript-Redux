@@ -2,6 +2,11 @@ Frontend: https://nailsstore.netlify.app/
 
 Backend: https://fullstackstoreapi.azurewebsites.net/index.html
 
+![image](https://github.com/GitMalmoer/fullstackstore-Frontend-Typescript-Redux/assets/113827015/c0a9a27c-8829-44fd-a9ea-2ad838d50124)
+![image](https://github.com/GitMalmoer/fullstackstore-Frontend-Typescript-Redux/assets/113827015/126b1eda-057c-4231-8ee7-099a40b7727f)
+![image](https://github.com/GitMalmoer/fullstackstore-Frontend-Typescript-Redux/assets/113827015/cf449d05-7b2a-4cdf-affa-7028d8ab6f0a)
+![image](https://github.com/GitMalmoer/fullstackstore-Frontend-Typescript-Redux/assets/113827015/0336df1d-31b8-44c3-bcd1-591d644cfa2c)
+
 
 
 
